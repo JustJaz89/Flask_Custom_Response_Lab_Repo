@@ -69,10 +69,13 @@ students_schema = StudentSchema(many = True)
 
 # Resources
 class StudentListResource(Resource):
+    # def get(self):
+    #     all_students = Student.query.all()
+    #     return students_schema.dump(all_students)
+
     def get(self):
-        all_students = Student.query.all()
-        return students_schema.dump(all_students)
+        return "Hello World!"
 
 # Routes
-
+api.add_resource(StudentListResource, '/api/students')
 
