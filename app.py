@@ -54,7 +54,18 @@ class Instructor(db.Model):
 
 
 # Schemas
+class StudentSchema(ma.Schema):
+    # id = fields.Integer(primary_key = True)
+    # first_name = fields.String(required = True)
+    # last_name = fields.String(required = True)
+    # year = fields.Integer()
+    # gpa = fields.Float()
 
+    class Meta:
+        fields = ("id", "first_name", "last_name", "year", "gpa")
+
+student_schema = StudentSchema()
+students_schema = StudentSchema(many = True)
 
 # Resources
 
