@@ -95,8 +95,33 @@ class StudentListResource(Resource):
         students = query.all()
         return students_schema.dump(students)
     
+class FullCourseDetailResource(resource):
+    def get(self, course_id):
+
+        custom_response = {}
+
+        students = Student.query.all()
+
+        for student in students:
+            students = Student.query.filter(Student.students.has(id=student.id))
+
+            custom_response[student.name] = {
+                "number_of_students": student.number_of_students,
+                "students": student_schema.dump(students)
+            }
+
+        return custom_response, 200
+        
+        # for student in student_data:
+        #     student_info = {
+        #         "number_of_students":student[]
+        #         "students": student[]
+        #     }
+        #     response["student_info"].append(student_info)
+
+        # return jsonify(response)
 
 # Routes
 api.add_resource(StudentListResource, '/api/students')
-# api.add_resource(StudentListResource, '/api/students/<int:student_id>')
+api.add_resource(FullCourseDetailResource, '/api/students/<int:course_id>')
 
