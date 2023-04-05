@@ -67,15 +67,36 @@ class StudentSchema(ma.Schema):
 student_schema = StudentSchema()
 students_schema = StudentSchema(many = True)
 
+class StudentNameSchema(ma.Schema):
+    class Meta:
+        fields = ("first_name", "last_name")
+
+student_name_schema = StudentNameSchema()
+students_schema = StudentNameSchema(many = True)
+
 # Resources
 class StudentListResource(Resource):
-    # def get(self):
-    #     all_students = Student.query.all()
-    #     return students_schema.dump(all_students)
-
     def get(self):
-        return "Hello World!"
+        all_students = Student.query.all()
+        return students_schema.dump(all_students)
+    
+    def get(self):
+        last_name_param = request.args.get("last_name")
+        gpa_param = request.args.get("gpa")
+        # sort = request.args.get("sort")
+
+        query = Student.query
+        if last_name_param:
+            query = query.filter(Student.last_name.has(name=last_name_param))
+        if gpa_param:
+            query = query.filter(Student.gpa.has(name=gpa_param))
+        # if sort:
+        #     query = query,order_by(sort)
+        students = query.all()
+        return students_schema.dump(students)
+    
 
 # Routes
 api.add_resource(StudentListResource, '/api/students')
+# api.add_resource(StudentListResource, '/api/students/<int:student_id>')
 
